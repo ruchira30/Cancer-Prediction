@@ -91,3 +91,29 @@ import joblib
 joblib.dump(processed, 'processed1')
 
 import os 
+os.getcwd()
+
+# Transform the original data using the pipeline defined above
+cancerclean = pd.DataFrame(processed.transform(cancerdf_X), columns = cancerdf_X.columns)  # Cleaned and processed data for ML Algorithm
+
+cancerclean.info()
+
+# Define scaling pipeline
+scale_pipeline = Pipeline([('scale', MinMaxScaler())])
+
+preprocess_pipeline2 = ColumnTransformer([('scale', scale_pipeline, cancerclean.columns)]) 
+
+processed2 = preprocess_pipeline2.fit(cancerclean)
+processed2
+
+# Save the Scaling pipeline
+joblib.dump(processed2, 'processed2')
+
+import os 
+os.getcwd()
+
+# Normalized data frame (considering the numerical part of data)
+cancerclean_n = pd.DataFrame(processed2.transform(cancerclean), columns = cancerclean.columns)
+
+eda = cancerclean_n.describe()
+eda
